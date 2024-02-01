@@ -20,12 +20,66 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: Docker@2
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'docker'
+    #     repository: 'xm2bwf2ynalz/necnation/espn-chatbot'
+    #     command: 'buildAndPush'
+    #     Dockerfile: '**/Dockerfile'
+    #     tags: '1.1.$(Build.BuildId)'
+    
+    - task: DownloadSecureFile@1
+      name: caCertificate
+      displayName: 'Download CA certificate'
       inputs:
-        containerRegistry: 'docker'
-        repository: 'xm2bwf2ynalz/necnation/espn-chatbot'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: '1.1.$(Build.BuildId)'
-    
-    
+        secureFile: 'utilitykey.pem'
+
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          #!/bin/bash
+          
+          ssh -i utilitykey.pem -o StrictHostKeyChecking=no -o ProxyCommand="ssh -i utilitykey.pem -W %h:%p -o StrictHostKeyChecking=no ubuntu@74.235.104.138" ubuntu@10.0.128.4 "\ 
+          
+          kubectl delete -f espn-chat-bot.yaml \
+          
+          rm -r espn-chat-bot.yaml \
+          
+          echo 'apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: chatbot-app-deployment
+          spec:
+            selector:
+              matchLabels:
+                app: chatbot-app
+            replicas: 1
+            template:
+              metadata:
+                labels:
+                  app: chatbot-app
+              spec:
+                imagePullSecrets:
+                - name: ngc-docker-reg-secret
+                containers:
+                - name: chatbot-app
+                  image: nvcr.io/xm2bwf2ynalz/necnation/espn-chatbot:1.1.6
+                  imagePullPolicy: IfNotPresent
+          
+          ---
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: chatbot-app-svc
+          spec:
+            type: NodePort
+            selector:
+              app: chatbot-app
+            ports:
+              - name: chat-app
+                port: 3000
+                targetPort: 3000
+                nodePort: 30033' > espn-chat-bot.yaml \
+                
+          kubectl apply -f espn-chat-bot.yaml "
