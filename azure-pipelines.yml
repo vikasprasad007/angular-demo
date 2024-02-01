@@ -37,7 +37,7 @@ stages:
       inputs:
         secureFile: 'utilitykey.pem'
 
-    - task: PowerShell@2
+    - task: Bash@3
       displayName: 'Connect to server and execute deployment scripts'
       inputs:
         targetType: 'inline'
