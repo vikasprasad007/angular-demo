@@ -18,7 +18,9 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: Tokkio-Dev0
+      name: Default
+      demands:
+      - agent.name -equals Tokkio-Dev0
       #vmImage: ubuntu-latest
     steps:
     # - task: Docker@2
