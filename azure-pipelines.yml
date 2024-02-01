@@ -23,7 +23,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'docker'
-        repository: 'xm2bwf2ynalz/necnation/'
+        repository: 'xm2bwf2ynalz/necnation/espn-chatbot'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '1.1.$(Build.BuildId)'
