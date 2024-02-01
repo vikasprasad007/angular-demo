@@ -42,13 +42,10 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          
-          ssh -i $(caCertificate.secureFilePath) -o StrictHostKeyChecking=no -o ProxyCommand="ssh -i $(caCertificate.secureFilePath) -W %h:%p -o StrictHostKeyChecking=no ubuntu@74.235.104.138" ubuntu@10.0.128.4 "\ 
-          
-          kubectl delete -f espn-chat-bot.yaml \
-          
-          rm -r espn-chat-bot.yaml \
-          
+          #!/bin/bash
+          ssh -i utilitykey.pem -o StrictHostKeyChecking=no -o ProxyCommand="ssh -i utilitykey.pem -W %h:%p -o StrictHostKeyChecking=no ubuntu@74.235.104.138" ubuntu@10.0.128.4 "\ 
+          kubectl delete -f espn-chat-bot.yaml \          
+          rm -r espn-chat-bot.yaml \          
           echo 'apiVersion: apps/v1
           kind: Deployment
           metadata:
@@ -68,8 +65,7 @@ stages:
                 containers:
                 - name: chatbot-app
                   image: nvcr.io/xm2bwf2ynalz/necnation/espn-chatbot:1.1.6
-                  imagePullPolicy: IfNotPresent
-          
+                  imagePullPolicy: IfNotPresent          
           ---
           apiVersion: v1
           kind: Service
@@ -84,5 +80,4 @@ stages:
                 port: 3000
                 targetPort: 3000
                 nodePort: 30033' > espn-chat-bot.yaml \
-                
           kubectl apply -f espn-chat-bot.yaml "
