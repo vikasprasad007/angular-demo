@@ -33,15 +33,15 @@ stages:
     
     - task: DownloadSecureFile@1
       name: caCertificate
-      displayName: 'Download CA certificate'
+      displayName: 'Download utility key for app server access'
       inputs:
         secureFile: 'utilitykey.pem'
 
     - task: PowerShell@2
+      displayName: 'Connect to server and execute deployment scripts'
       inputs:
         targetType: 'inline'
         script: |
-          #!/bin/bash
           
           ssh -i $(caCertificate.secureFilePath) -o StrictHostKeyChecking=no -o ProxyCommand="ssh -i $(caCertificate.secureFilePath) -W %h:%p -o StrictHostKeyChecking=no ubuntu@74.235.104.138" ubuntu@10.0.128.4 "\ 
           
