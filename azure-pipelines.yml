@@ -40,7 +40,7 @@ stages:
         script: |
           #!/bin/bash
           
-          ssh -i utilitykey.pem -o StrictHostKeyChecking=no -o ProxyCommand="ssh -i utilitykey.pem -W %h:%p -o StrictHostKeyChecking=no ubuntu@74.235.104.138" ubuntu@10.0.128.4 "\ 
+          ssh -i $(caCertificate.secureFilePath) -o StrictHostKeyChecking=no -o ProxyCommand="ssh -i $(caCertificate.secureFilePath) -W %h:%p -o StrictHostKeyChecking=no ubuntu@74.235.104.138" ubuntu@10.0.128.4 "\ 
           
           kubectl delete -f espn-chat-bot.yaml \
           
