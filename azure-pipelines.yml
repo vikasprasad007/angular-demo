@@ -23,13 +23,13 @@ stages:
       - agent.name -equals Tokkio-Dev0
       #vmImage: ubuntu-latest
     steps:
-    # - task: Docker@2
-    #   inputs:
-    #     containerRegistry: 'docker'
-    #     repository: 'xm2bwf2ynalz/necnation/espn-chatbot'
-    #     command: 'buildAndPush'
-    #     Dockerfile: '**/Dockerfile'
-    #     tags: '1.1.$(Build.BuildId)'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'docker'
+        repository: 'xm2bwf2ynalz/necnation/espn-chatbot'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '1.1.$(Build.BuildId)'
     
     - task: DownloadSecureFile@1
       name: caCertificate
@@ -64,7 +64,7 @@ stages:
                 - name: ngc-docker-reg-secret
                 containers:
                 - name: chatbot-app
-                  image: nvcr.io/xm2bwf2ynalz/necnation/espn-chatbot:1.1.6
+                  image: nvcr.io/xm2bwf2ynalz/necnation/espn-chatbot:1.1.$(Build.BuildId)
                   imagePullPolicy: IfNotPresent          
           ---
           apiVersion: v1
