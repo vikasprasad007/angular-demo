@@ -79,5 +79,5 @@ stages:
               - name: chat-app
                 port: 3000
                 targetPort: 3000
-                nodePort: 30033' > espn-chat-bot.yaml \
+                nodePort: 30033' > espn-chat-bot.yaml
           kubectl apply -f espn-chat-bot.yaml "
