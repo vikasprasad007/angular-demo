@@ -43,7 +43,7 @@ stages:
         targetType: 'inline'
         script: |
           #!/bin/bash
-          ssh -i $(caCertificate.secureFilePath) -o StrictHostKeyChecking=no -o ProxyCommand="ssh -i $(caCertificate.secureFilePath) -W %h:%p -o StrictHostKeyChecking=no ubuntu@74.235.104.138" ubuntu@10.0.128.4 "\ 
+          ssh -i $(caCertificate.secureFilePath) -o StrictHostKeyChecking=no -o ProxyCommand="ssh -i $(caCertificate.secureFilePath) -W %h:%p -o StrictHostKeyChecking=no ubuntu@4.246.141.208" ubuntu@10.0.128.4 "\ 
           kubectl delete -f espn-chat-bot.yaml \          
           rm -r espn-chat-bot.yaml \          
           echo 'apiVersion: apps/v1
